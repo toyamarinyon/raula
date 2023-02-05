@@ -13,6 +13,7 @@
     "build": "tsc --project tsconfig.build.json && pnpm build:esbuild && pnpm build:type",
     "build:esbuild": "esbuild src/index.ts --bundle --outfile=dist/index.js --format=esm --target=esnext --loader:.ts=tsx --external:react --jsx=automatic --minify",
     "build:type": "tsc --project tsconfig.build.json",
+    "prepare": "npm run build",
     "test": "vitest"
   },
   "dependencies": {
