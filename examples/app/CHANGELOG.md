@@ -1,5 +1,12 @@
 # example
 
+## 0.0.2
+
+### Patch Changes
+
+- Updated dependencies [[`49537eb`](https://github.com/toyamarinyon/raula/commit/49537eb938fdb84cc0100afa16b8dc03a11375b2)]:
+  - raula@0.2.0
+
 ## 0.0.1
 
 ### Patch Changes
