@@ -1,14 +1,10 @@
-import { Link, useQuery } from "raula";
-import { routes } from "../routes";
-
+import { Link, useRouter } from "raula";
 export const Hello = (): JSX.Element => {
-  const {query} = useQuery()
+  const { router } = useRouter();
   return (
-  <div>
-    Hello
-    <Link to={routes.path["/world"]()}>World</Link>
-    <pre>
-      query is {JSON.stringify(query)}
-    </pre>
-  </div>
-)};
+    <div>
+      Hello
+      <Link to="/world">world</Link>
+    </div>
+  );
+};

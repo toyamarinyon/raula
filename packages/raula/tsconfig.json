@@ -7,6 +7,10 @@
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "noEmit": true,
     "allowSyntheticDefaultImports": true,
+    "jsx": "react-jsx",
+    "paths": {
+      "raula": ["./src/index.ts"]
+    }
   },
   "exclude": ["node_modules"]
 }

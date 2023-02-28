@@ -1,1 +1,1 @@
-export const World = (): JSX.Element => <div>World</div>;
+export const World = (): JSX.Element => <div>World!</div>;
