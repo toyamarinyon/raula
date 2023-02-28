@@ -1,5 +1,11 @@
 # raula
 
+## 0.3.0
+
+### Minor Changes
+
+- [#2](https://github.com/toyamarinyon/raula/pull/2) [`7882e3f`](https://github.com/toyamarinyon/raula/commit/7882e3fe1c5424c8dc2f52496bc807ea195b280c) Thanks [@toyamarinyon](https://github.com/toyamarinyon)! - params and search
+
 ## 0.2.0
 
 ### Minor Changes
