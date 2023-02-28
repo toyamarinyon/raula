@@ -7,6 +7,9 @@
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "noEmit": true,
     "allowSyntheticDefaultImports": true,
+    "paths": {
+      "raula": ["./src/index.ts"]
+    }
   },
   "exclude": ["node_modules"]
 }

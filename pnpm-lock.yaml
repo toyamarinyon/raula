@@ -47,10 +47,12 @@ importers:
       typescript: ^4.9.3
       vite: ^4.1.1
       vitest: ^0.28.4
+      zod: ^3.20.6
     dependencies:
       history: 5.3.0
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+      zod: 3.20.6
     devDependencies:
       '@tsconfig/esm': 1.0.2
       '@types/babel__core': 7.20.0
@@ -3256,3 +3258,7 @@ packages:
     resolution: {integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==}
     engines: {node: '>=12.20'}
     dev: true
+
+  /zod/3.20.6:
+    resolution: {integrity: sha512-oyu0m54SGCtzh6EClBVqDDlAYRz4jrVtKwQ7ZnsEmMI9HnzuZFj8QFwAY1M5uniIYACdGvv0PBWPF2kO0aNofA==}
+    dev: false
