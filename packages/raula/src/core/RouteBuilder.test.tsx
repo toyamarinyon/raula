@@ -26,6 +26,8 @@ it("adds a route with search", () => {
 });
 it("resolves a route", () => {
   const route = createRouter()
+    .add("/", () => <div>home</div>)
+    .add("/hello", () => <div>hello</div>)
     .add("/users/:userId", ({ params }) => <div>{params.userId}</div>)
     .add(
       "/posts/:postId",
@@ -36,6 +38,11 @@ it("resolves a route", () => {
         </div>
       )
     );
+  expect(route.resolve("/hello")).toMatchInlineSnapshot(`
+    <div>
+      hello
+    </div>
+  `);
   expect(route.resolve("/users/4")).toMatchInlineSnapshot(`
     <div>
       4
