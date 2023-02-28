@@ -1,4 +1,4 @@
-import { Router } from "raula";
+import { Router } from "./useRouter";
 import { inferRoute, RoutePath } from "../core/RouteBuilder";
 
 export function replacePathParam<T extends keyof inferRoute<Router>>(
