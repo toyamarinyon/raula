@@ -8,4 +8,5 @@ export default defineConfig({
   dts: true,
   target: "esnext",
   format: ["esm"],
+  tsconfig: "tsconfig.build.json",
 });

@@ -10,9 +10,10 @@
     "test": "vitest"
   },
   "dependencies": {
+    "raula": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "raula": "workspace:*"
+    "zod": "^3.20.6"
   },
   "devDependencies": {
     "@types/react": "^18.0.27",

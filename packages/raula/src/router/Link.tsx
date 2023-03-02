@@ -9,37 +9,28 @@ import { inferRoute } from "../core";
 import { replacePathParam } from "./replacePathParam";
 import { Router, useRouter } from "./useRouter";
 
+type AnchorOmitted = Omit<
+  DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>,
+  "href" | "onClick"
+>;
 type LinkProps<Path extends keyof inferRoute<Router>> =
   Path extends `/${infer _}/:${infer Param}`
     ? inferRoute<Router>[Path]["search"] extends AnyZodObject
-      ? Omit<
-          DetailedHTMLProps<
-            AnchorHTMLAttributes<HTMLAnchorElement>,
-            HTMLAnchorElement
-          >,
-          "href" | "onClick"
-        > & {
+      ? AnchorOmitted & {
           to: Path;
           params: { [K in Param]: string | number };
-          search: z.infer<inferRoute<Router>[Path]["search"]>;
+          search?: z.infer<inferRoute<Router>[Path]["search"]>;
         }
-      : Omit<
-          DetailedHTMLProps<
-            AnchorHTMLAttributes<HTMLAnchorElement>,
-            HTMLAnchorElement
-          >,
-          "href" | "onClick"
-        > & {
+      : AnchorOmitted & {
           to: Path;
           params: { [K in Param]: string | number };
         }
-    : Omit<
-        DetailedHTMLProps<
-          AnchorHTMLAttributes<HTMLAnchorElement>,
-          HTMLAnchorElement
-        >,
-        "href" | "onClick"
-      > & {
+    : inferRoute<Router>[Path]["search"] extends AnyZodObject
+    ? AnchorOmitted & {
+        to: Path;
+        search?: z.infer<inferRoute<Router>[Path]["search"]>;
+      }
+    : AnchorOmitted & {
         to: Path;
       };
 
@@ -56,13 +47,18 @@ export function Link<Path extends keyof inferRoute<Router>>({
       // @ts-ignore
       router.push(to, {
         search: args.search,
+        // @ts-ignore
         params: args.params,
       });
     },
     [router, to]
   );
   return (
-    <a {...props} onClick={handleClick} href={replacePathParam(to, args ?? ({} as any))}>
+    <a
+      {...props}
+      onClick={handleClick}
+      href={replacePathParam(to, args.params ?? ({} as any))}
+    >
       {children}
     </a>
   );

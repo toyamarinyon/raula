@@ -1,9 +1,12 @@
-import { Hello } from "./pages/Hello";
-import { World } from "./pages/World";
+import { Welcome } from "./pages/Welcome";
+import { Post } from "./pages/Post";
 import { createRouter } from "raula";
+import { z } from "zod";
 export const appRouter = createRouter()
-  .add("/", () => <Hello />)
-  .add("/world", () => <World />);
+  .add("/", z.object({ msg: z.string() }), () => <Welcome />)
+  .add("/post/:postId", ({ params: { postId } }) => (
+    <Post postId={postId as string} />
+  ));
 
 type AppRouter = typeof appRouter;
 declare module "raula" {
