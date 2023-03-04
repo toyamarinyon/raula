@@ -1,20 +1,20 @@
 import { it, expect } from "vitest";
 import { z } from "zod";
-import { createRouter, RouteBuilder } from "./RouteBuilder";
+import { createRouting, RoutingBuilder } from "./createRouting";
 
 it("creates a new route", () => {
-  const route = createRouter();
-  expect(route).toBeInstanceOf(RouteBuilder);
+  const route = createRouting();
+  expect(route).toBeInstanceOf(RoutingBuilder);
 });
 it("adds a route", () => {
-  createRouter().add(
+  createRouting().add(
     "/posts/:postId",
     z.object({ hello: z.string() }),
     ({ params }) => <div>{params.postId}</div>
   );
 });
 it("adds a route with search", () => {
-  createRouter().add(
+  createRouting().add(
     "/posts/:postId",
     z.object({ hello: z.string() }),
     ({ params, search }) => (
@@ -25,7 +25,7 @@ it("adds a route with search", () => {
   );
 });
 it("resolves a route", () => {
-  const route = createRouter()
+  const route = createRouting()
     .add("/", () => <div>home</div>)
     .add("/hello", () => <div>hello</div>)
     .add("/users/:userId", ({ params }) => <div>{params.userId}</div>)

@@ -6,16 +6,19 @@ export type RoutePath<T extends string | number | symbol> =
     ? { [K in Param | keyof RoutePath<`/${Rest}`>]: string | number }
     : T extends `/${infer _}/:${infer Param}`
     ? { [K in Param]: string | number }
-    : {};
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    : Record<string, any>;
 
 type RenderComponent<Path extends string, search> = ({
   params,
   search,
 }: {
   params: RoutePath<Path>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   search: z.infer<search extends AnyZodObject ? search : any>;
 }) => JSX.Element;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type RouteHandler<Path extends string, Search = any> = {
   renderComponent: RenderComponent<Path, Search>;
   search: Search;
@@ -23,33 +26,35 @@ type RouteHandler<Path extends string, Search = any> = {
 
 export type RouteRecord<
   Path extends string = string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Search extends AnyZodObject = any
 > = Record<Path, RouteHandler<Path, Search>>;
 
-export function createRouter() {
-  return new RouteBuilder({});
+export function createRouting() {
+  return new RoutingBuilder({});
 }
 
-export class RouteBuilder<R extends RouteRecord> {
+export class RoutingBuilder<R extends RouteRecord> {
   routeRecords: R;
   constructor(route: R) {
     this.routeRecords = route;
   }
   add<Path extends string>(
     path: Path,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     handler: RenderComponent<Path, any>
-  ): RouteBuilder<R & RouteRecord<Path>>;
+  ): RoutingBuilder<R & RouteRecord<Path>>;
   add<Path extends string, S extends AnyZodObject>(
     path: Path,
     search: S,
     handler: RenderComponent<Path, S>
-  ): RouteBuilder<R & RouteRecord<Path, S>>;
+  ): RoutingBuilder<R & RouteRecord<Path, S>>;
   add<Path extends string, S extends AnyZodObject>(
     path: Path,
     search: S | RenderComponent<Path, S>,
     handler?: RenderComponent<Path, S>
   ) {
-    return new RouteBuilder({
+    return new RoutingBuilder({
       ...this.routeRecords,
       ...({
         [path]: {
@@ -71,6 +76,7 @@ export class RouteBuilder<R extends RouteRecord> {
     const result = paramRegexp.exec(path);
     const route = this.routeRecords[paths[index - 1]] as RouteHandler<
       string,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       any
     >;
 
@@ -83,6 +89,8 @@ export class RouteBuilder<R extends RouteRecord> {
   }
 }
 
-export type inferRoute<T> = T extends RouteBuilder<any>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type inferRoute<T> = T extends RoutingBuilder<any>
   ? T["routeRecords"]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   : any;

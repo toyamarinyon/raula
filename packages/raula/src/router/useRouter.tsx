@@ -1,7 +1,7 @@
 import { useContext, useMemo } from "react";
 import { AnyZodObject, z } from "zod";
-import { inferRoute } from "../core/RouteBuilder";
-import { RouterContext } from "./Context";
+import { inferRoute } from "../core/createRouting";
+import { RouterContext } from "./Router";
 import { replacePathParam } from "./replacePathParam";
 
 type inferRouteArgs<Path, Z> = Path extends `/${infer _}/:${infer Param}`
@@ -12,13 +12,14 @@ type inferRouteArgs<Path, Z> = Path extends `/${infer _}/:${infer Param}`
   ? [{ search: z.infer<Z> }] | []
   : [];
 
-export interface Router {}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface Routing {}
 
 type UseRouter = () => {
   router: {
-    push: <T extends keyof inferRoute<Router>>(
+    push: <T extends keyof inferRoute<Routing>>(
       path: T,
-      ...args: inferRouteArgs<T, inferRoute<Router>[T]["search"]>
+      ...args: inferRouteArgs<T, inferRoute<Routing>[T]["search"]>
     ) => void;
   };
 };
@@ -27,13 +28,14 @@ export const useRouter: UseRouter = () => {
 
   const push = useMemo(
     () =>
-      <T extends keyof inferRoute<Router>>(
+      <T extends keyof inferRoute<Routing>>(
         path: T,
-        ...args: inferRouteArgs<T, inferRoute<Router>[T]["search"]>
+        ...args: inferRouteArgs<T, inferRoute<Routing>[T]["search"]>
       ) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const arg0 = (args as [{ search?: any; params?: any }])[0];
         router.history.push({
-          pathname: replacePathParam(path, arg0.params ?? ({} as any)),
+          pathname: replacePathParam(path, arg0.params ?? ({} as unknown)),
           search: arg0.search ? `?${new URLSearchParams(arg0.search)}` : "",
         });
       },
