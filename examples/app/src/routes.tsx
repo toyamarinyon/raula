@@ -4,10 +4,14 @@ import { createRouting } from "raula";
 import { z } from "zod";
 import { Layout } from "./pages/Layout";
 
-export const appRouter = createRouting()
+export const appRouter = createRouting({
+  notFound: <div>Not found</div>,
+})
   .setLayout(({ page }) => <Layout page={page} />)
   .add("/", () => <h1>Home</h1>)
-  .add("/posts", z.object({ query: z.string() }), () => <PostList />)
+  .add("/posts", z.object({ q: z.string() }), ({ search }) => (
+    <PostList query={search.q} />
+  ))
   .add("/post/:postId", ({ params: { postId } }) => (
     <Post postId={postId as string} />
   ));

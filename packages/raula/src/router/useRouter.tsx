@@ -34,10 +34,15 @@ export const useRouter: UseRouter = () => {
       ) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const arg0 = (args as [{ search?: any; params?: any }] | [])[0];
-        router.history.push({
-          pathname: replacePathParam(path, arg0?.params ?? ({} as unknown)),
-          search: arg0?.search ? `?${new URLSearchParams(arg0.search)}` : "",
-        });
+        const search = arg0?.search
+          ? `?${new URLSearchParams(arg0.search)}`
+          : "";
+        const to = `${replacePathParam(
+          path,
+          arg0?.params ?? ({} as unknown)
+        )}${search}`;
+
+        router.history.push(to);
       },
     [router.history]
   );
