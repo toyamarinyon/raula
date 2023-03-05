@@ -1,13 +1,11 @@
-
-import { RouterProvider } from "raula";
+import { Router } from "raula";
 import { appRouter } from "./routes";
-
 
 const App = (): JSX.Element => {
   return (
-    <main>
-      <RouterProvider router={appRouter} />
-    </main>
+    <div>
+      <Router routes={appRouter} />
+    </div>
   );
 };
 
