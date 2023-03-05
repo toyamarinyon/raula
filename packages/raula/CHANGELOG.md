@@ -1,5 +1,11 @@
 # raula
 
+## 0.4.0
+
+### Minor Changes
+
+- [#4](https://github.com/toyamarinyon/raula/pull/4) [`fed635f`](https://github.com/toyamarinyon/raula/commit/fed635f9c3cdb046efa122cb71707c68eb6e7c56) Thanks [@toyamarinyon](https://github.com/toyamarinyon)! - Layout and not found
+
 ## 0.3.1
 
 ### Patch Changes
