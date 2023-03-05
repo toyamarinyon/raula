@@ -2,7 +2,7 @@
 
 Raula is a typesafe routing library for the React. You can choose a destination from intellisense of vscode with no code generation.
 
-<img src="./docs/video/introduction.gif" />
+<img src="../../docs/video/introduction.gif" />
 
 ## Motivation
 
@@ -19,11 +19,11 @@ You can try example project on the browser with StackBlitz.
 
 ```bash
 # npm
-npm install raulra
+npm install raula
 # yarn
-yarn add raulra
+yarn add raula
 # pnpm
-yarn add raulra
+yarn add raula
 ```
 # Tutorial
 
