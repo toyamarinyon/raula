@@ -15,7 +15,7 @@ But, I think no one uses full-power TypeScript inference like tRPC so I created 
 
 You can try example project on the browser with StackBlitz.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/toyamarinyon/raula/tree/canary/examples/app)
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/toyamarinyon/raula/tree/main/examples/app)
 
 # Getting Started
 
