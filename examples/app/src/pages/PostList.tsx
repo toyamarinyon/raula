@@ -36,6 +36,7 @@ export const PostList = ({ query = "" }: Props): JSX.Element => {
       <ul>
         {posts.map(({ title, id }) => (
           <li key={id}>
+            {/* You remove params and an error appears */}
             <Link to="/post/:postId" params={{ postId: id }}>
               {title}
             </Link>
