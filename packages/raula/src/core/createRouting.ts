@@ -6,8 +6,8 @@ export type RoutePath<T extends string | number | symbol> =
     ? { [K in Param | keyof RoutePath<`/${Rest}`>]: string | number }
     : T extends `/${infer _}/:${infer Param}`
     ? { [K in Param]: string | number }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    : Record<string, any>;
+    : // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      Record<string, any>;
 
 type RenderComponent<Path extends string, search> = ({
   params,
@@ -18,10 +18,13 @@ type RenderComponent<Path extends string, search> = ({
   search: z.infer<search extends AnyZodObject ? search : any>;
 }) => JSX.Element;
 
+export type LayoutComponent = (props: { page: JSX.Element }) => JSX.Element;
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type RouteHandler<Path extends string, Search = any> = {
   renderComponent: RenderComponent<Path, Search>;
   search: Search;
+  layout?: LayoutComponent;
 };
 
 export type RouteRecord<
@@ -36,8 +39,10 @@ export function createRouting() {
 
 export class RoutingBuilder<R extends RouteRecord> {
   routeRecords: R;
-  constructor(route: R) {
+  private layout?: LayoutComponent;
+  constructor(route: R, layout?: LayoutComponent) {
     this.routeRecords = route;
+    this.layout = layout;
   }
   add<Path extends string>(
     path: Path,
@@ -54,15 +59,23 @@ export class RoutingBuilder<R extends RouteRecord> {
     search: S | RenderComponent<Path, S>,
     handler?: RenderComponent<Path, S>
   ) {
-    return new RoutingBuilder({
-      ...this.routeRecords,
-      ...({
-        [path]: {
-          renderComponent: typeof search === "function" ? search : handler,
-          search: typeof search === "object" ? search : undefined,
-        },
-      } as RouteRecord<Path, S>),
-    });
+    return new RoutingBuilder(
+      {
+        ...this.routeRecords,
+        ...({
+          [path]: {
+            renderComponent: typeof search === "function" ? search : handler,
+            search: typeof search === "object" ? search : undefined,
+            layout: this.layout,
+          },
+        } as RouteRecord<Path, S>),
+      },
+      this.layout
+    );
+  }
+  setLayout(component: LayoutComponent) {
+    this.layout = component;
+    return this;
   }
   resolve<Path extends string>(path: Path, search?: string) {
     const paths = Object.keys(this.routeRecords);
@@ -81,6 +94,14 @@ export class RoutingBuilder<R extends RouteRecord> {
     >;
 
     const searchParams = new URLSearchParams(search);
+    if (route.layout != null) {
+      return route.layout({
+        page: route.renderComponent({
+          params: result?.groups ?? {},
+          search: Object.fromEntries(searchParams.entries()),
+        }),
+      });
+    }
 
     return route.renderComponent({
       params: result?.groups ?? {},
@@ -92,5 +113,5 @@ export class RoutingBuilder<R extends RouteRecord> {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type inferRoute<T> = T extends RoutingBuilder<any>
   ? T["routeRecords"]
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  : any;
+  : // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    any;

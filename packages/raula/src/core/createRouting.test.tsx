@@ -1,3 +1,4 @@
+import { render, screen } from "@testing-library/react";
 import { it, expect } from "vitest";
 import { z } from "zod";
 import { createRouting, RoutingBuilder } from "./createRouting";
@@ -56,4 +57,17 @@ it("resolves a route", () => {
       2
     </div>
   `);
+});
+
+it("set the layout", () => {
+  const route = createRouting()
+    .setLayout(({ page }) => (
+      <div>
+        <span>This is layout</span>
+        <main>{page}</main>
+      </div>
+    ))
+    .add("/", () => <div>home</div>);
+  render(route.resolve("/"))
+  expect(screen.getByText('This is layout')).toBeTruthy()
 });

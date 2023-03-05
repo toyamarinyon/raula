@@ -15,18 +15,14 @@ export interface RouterLayout {
   page: JSX.Element;
 }
 
-export type LayoutComponent = (props: RouterLayout) => JSX.Element;
-
 type Props = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   routes: RoutingBuilder<any>;
-  layout?: LayoutComponent;
   overrideHistory?: History;
   children?: ReactNode;
 };
 export const Router = ({
   routes,
-  layout,
   overrideHistory,
   children,
 }: Props): JSX.Element => {
@@ -47,9 +43,7 @@ export const Router = ({
   return (
     <RouterContext.Provider value={{ history, routes }}>
       <>
-        {layout?.({
-          page: routes.resolve(location.pathname, location.search),
-        }) ?? routes.resolve(location.pathname, location.search)}
+        {routes.resolve(location.pathname, location.search)}
         {/* children props are used for test */}
         {children}
       </>

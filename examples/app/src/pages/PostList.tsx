@@ -1,7 +1,7 @@
 import { Link, useRouter } from "raula";
 import { useCallback } from "react";
 import { posts } from "../data/posts";
-export const Welcome = (): JSX.Element => {
+export const PostList = (): JSX.Element => {
   const { router } = useRouter();
   const handleSubmit = useCallback(() => {
     router.push("/");
@@ -10,9 +10,7 @@ export const Welcome = (): JSX.Element => {
     <div>
       <h1>Posts</h1>
       <button onClick={handleSubmit}>link</button>
-      <Link to="/" search={{ msg: "hello" }}>
-        Link
-      </Link>
+
       <ul>
         {Object.keys(posts).map((key) => (
           <li key={key}>
