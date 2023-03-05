@@ -33,16 +33,23 @@ export type RouteRecord<
   Search extends AnyZodObject = any
 > = Record<Path, RouteHandler<Path, Search>>;
 
-export function createRouting() {
-  return new RoutingBuilder({});
+type RoutingOption = {
+  layout?: LayoutComponent;
+  notFound? : JSX.Element
+}
+
+export function createRouting(option: RoutingOption = {}) {
+  return new RoutingBuilder({}, option);
 }
 
 export class RoutingBuilder<R extends RouteRecord> {
   routeRecords: R;
   private layout?: LayoutComponent;
-  constructor(route: R, layout?: LayoutComponent) {
+  private notFound?: JSX.Element;
+  constructor(route: R, option?: RoutingOption) {
     this.routeRecords = route;
-    this.layout = layout;
+    this.layout = option?.layout;
+    this.notFound = option?.notFound;
   }
   add<Path extends string>(
     path: Path,
@@ -70,7 +77,10 @@ export class RoutingBuilder<R extends RouteRecord> {
           },
         } as RouteRecord<Path, S>),
       },
-      this.layout
+      {
+        layout: this.layout,
+        notFound: this.notFound
+      }
     );
   }
   setLayout(component: LayoutComponent) {
@@ -82,7 +92,10 @@ export class RoutingBuilder<R extends RouteRecord> {
     const regexp = paths.map((path) => pathToRegexp(path).source).join("|");
     const match = new RegExp(regexp).exec(path);
     if (match == null) {
-      throw new Error(`Route ${path} not found`);
+      if (this.notFound != null) {
+        return this.notFound;
+      }
+      throw new Error(`Route ${path} is not found`)
     }
     const index = match.lastIndexOf(path);
     const paramRegexp = new RegExp(pathToRegexp(paths[index - 1], true));

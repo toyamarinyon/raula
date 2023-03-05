@@ -71,3 +71,12 @@ it("set the layout", () => {
   render(route.resolve("/"))
   expect(screen.getByText('This is layout')).toBeTruthy()
 });
+
+it('handle not found', () => {
+  const route = createRouting({
+    notFound: <div>Not found</div>
+  })
+    .add('/', () => <div>home</div>)
+  render(route.resolve('/nothing'))
+  expect(screen.getByText('Not found')).toBeTruthy()
+})
