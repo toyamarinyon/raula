@@ -33,10 +33,10 @@ export const useRouter: UseRouter = () => {
         ...args: inferRouteArgs<T, inferRoute<Routing>[T]["search"]>
       ) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const arg0 = (args as [{ search?: any; params?: any }])[0];
+        const arg0 = (args as [{ search?: any; params?: any }] | [])[0];
         router.history.push({
-          pathname: replacePathParam(path, arg0.params ?? ({} as unknown)),
-          search: arg0.search ? `?${new URLSearchParams(arg0.search)}` : "",
+          pathname: replacePathParam(path, arg0?.params ?? ({} as unknown)),
+          search: arg0?.search ? `?${new URLSearchParams(arg0.search)}` : "",
         });
       },
     [router.history]
