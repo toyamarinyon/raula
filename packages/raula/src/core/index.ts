@@ -1,1 +1,1 @@
-export * from "./createRouting";
+export * from './createRouting'

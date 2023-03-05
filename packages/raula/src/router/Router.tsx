@@ -1,26 +1,24 @@
-import { BrowserHistory, createBrowserHistory, History } from "history";
-import { createContext, ReactNode, useEffect, useMemo, useState } from "react";
-import { RoutingBuilder } from "../core/createRouting";
+import { RoutingBuilder } from '../core/createRouting'
+import { BrowserHistory, createBrowserHistory, History } from 'history'
+import { createContext, ReactNode, useEffect, useMemo, useState } from 'react'
 
 interface TRouterContext {
-  history: BrowserHistory;
+  history: BrowserHistory
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  routes: RoutingBuilder<any>;
+  routes: RoutingBuilder<any>
 }
-export const RouterContext = createContext<TRouterContext>(
-  {} as TRouterContext
-);
+export const RouterContext = createContext<TRouterContext>({} as TRouterContext)
 
 export interface RouterLayout {
-  page: JSX.Element;
+  page: JSX.Element
 }
 
 type Props = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  routes: RoutingBuilder<any>;
-  overrideHistory?: History;
-  children?: ReactNode;
-};
+  routes: RoutingBuilder<any>
+  overrideHistory?: History
+  children?: ReactNode
+}
 export const Router = ({
   routes,
   overrideHistory,
@@ -29,17 +27,17 @@ export const Router = ({
   const history = useMemo(
     () => overrideHistory ?? createBrowserHistory(),
     [overrideHistory]
-  );
-  const [location, setLocation] = useState(history.location);
+  )
+  const [location, setLocation] = useState(history.location)
 
   useEffect(() => {
     const cleanup = history.listen(({ location }) => {
-      setLocation(location);
-    });
+      setLocation(location)
+    })
     return () => {
-      cleanup();
-    };
-  }, [history]);
+      cleanup()
+    }
+  }, [history])
   return (
     <RouterContext.Provider value={{ history, routes }}>
       <>
@@ -48,5 +46,5 @@ export const Router = ({
         {children}
       </>
     </RouterContext.Provider>
-  );
-};
+  )
+}
