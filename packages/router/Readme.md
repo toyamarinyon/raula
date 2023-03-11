@@ -21,11 +21,11 @@ You can try example project on the browser with StackBlitz.
 
 ```bash
 # npm
-npm install raula
+npm install @raula/router
 # yarn
-yarn add raula
+yarn add @raula/router
 # pnpm
-yarn add raula
+yarn add @raula/router
 ```
 # Tutorial
 
