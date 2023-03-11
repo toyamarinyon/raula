@@ -1,5 +1,11 @@
 # raula
 
+## 0.4.1
+
+### Patch Changes
+
+- [#7](https://github.com/toyamarinyon/raula/pull/7) [`baa838c`](https://github.com/toyamarinyon/raula/commit/baa838c68aa006a022888753e90e88cdb3726c0d) Thanks [@toyamarinyon](https://github.com/toyamarinyon)! - raula to @raula/router
+
 ## 0.4.0
 
 ### Minor Changes
