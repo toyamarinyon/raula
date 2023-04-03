@@ -1,1 +1,1 @@
-export { FormBuilder } from './FormBuilder'
+export { FormBuilder, createForm } from './FormBuilder'

@@ -1,10 +1,18 @@
 {
   "name": "@raula/form",
+  "type": "module",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/*"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest",
+    "build": "tsup src/index.ts",
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -26,8 +34,10 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@testing-library/dom": "^9.2.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
     "@trivago/prettier-plugin-sort-imports": "^4.1.1",
     "@tsconfig/esm": "^1.0.2",
     "@types/react": "^18.0.27",
@@ -36,6 +46,7 @@
     "@vitejs/plugin-react": "^3.1.0",
     "happy-dom": "^8.9.0",
     "prettier": "^2.8.4",
+    "tsup": "^6.6.3",
     "vite": "^4.2.1",
     "vitest": "^0.28.4"
   }
