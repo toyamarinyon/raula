@@ -1,6 +1,7 @@
 import { ReactNode } from "react"
 
 export type ValueAs = 'string' | 'number' | 'boolean'
+export type inferValueAs<T> = T extends 'string' ? string : T extends 'number' ? number : T extends 'boolean' ? boolean : never
 export type DefaultValueAs = 'value' | 'check'
 type Component<Props> = (args: Props) => ReactNode
 export type InputMethod<TValueAs extends ValueAs = any, TDefaultValueAs extends DefaultValueAs = any, TProps = never> = {

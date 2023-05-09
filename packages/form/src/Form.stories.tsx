@@ -1,6 +1,7 @@
 import { initForm } from './Form'
 import type { Meta, StoryObj } from '@storybook/react'
 import { string } from './Input'
+import { useFields } from './useFields'
 
 const { inputs, Form } = initForm().inputMethods({
   text: string().render(() => <input type="text" />),
@@ -10,16 +11,19 @@ const { inputs, Form } = initForm().inputMethods({
   occupations: '職業'
 }).create()
 
-const fields = {
-  username: inputs.text(),
-  occupations: inputs.select({
-    selectOption: [
-      { label: 'a', value: 'a' },
-      { label: 'b', value: 'b' },
-    ]
-  })
-}
 const Component = (): JSX.Element => {
+  const fields = useFields({
+    username: inputs.text(),
+    occupations: inputs.select({
+      selectOption: [
+        { label: 'a', value: 'a' },
+        { label: 'b', value: 'b' },
+      ]
+    })
+  }, {
+    username: 'testHello',
+    occupations: 'b'
+  })
 
   return (
     <Form fields={fields} />
