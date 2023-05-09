@@ -1,1 +1,2 @@
-export { FormBuilder, createForm } from './FormBuilder'
+export { initForm } from "./Form"
+export { string, number, boolean } from "./Input"
