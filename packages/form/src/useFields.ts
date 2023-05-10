@@ -1,8 +1,6 @@
 import { useMemo } from "react";
 import { InputMethodWithComponentPropsRecord, inferInputMethodValueAsRecord } from "./Form";
 
-
-
 export function useFields<TRecord extends InputMethodWithComponentPropsRecord>(fields: TRecord, defaultValues: inferInputMethodValueAsRecord<TRecord>) {
   return useMemo(() => {
     const newFields = Object.keys(fields).map((key) => {
