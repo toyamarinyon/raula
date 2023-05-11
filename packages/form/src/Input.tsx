@@ -1,45 +1,23 @@
-import { ReactNode } from "react"
+import { DefaultValueAs, InputMethod, ValueAs, inferValueAs } from "./InputMethod"
+import { ValidationRule } from "./Validation"
 
-export type ValueAs = 'string' | 'number' | 'boolean'
-export type inferValueAs<T> = T extends 'string' ? string : T extends 'number' ? number : T extends 'boolean' ? boolean : never
-export type DefaultValueAs = 'value' | 'check'
-type Component<Props> = (args: Props) => ReactNode
-export type InputMethod<TValueAs extends ValueAs = any, TDefaultValueAs extends DefaultValueAs = any, TProps = never> = {
-  valueAs: TValueAs
-  defaultValueAs: TDefaultValueAs
-  component: Component<TProps>
-}
-
-function inputMethodBuilder<TValueAs extends ValueAs, TDefaultValueAs extends DefaultValueAs, TProps = any>({ valueAs, defaultValueAs }: { valueAs: TValueAs, defaultValueAs: TDefaultValueAs }) {
-  return {
-    renderOption: <NewProps,>() => inputMethodBuilder<TValueAs, TDefaultValueAs, NewProps>({ valueAs, defaultValueAs }),
-    render: (component: Component<TProps>) => inputMethod(valueAs, defaultValueAs, component)
+export type Input<TValueAs extends ValueAs = any, TDefaultAs extends DefaultValueAs = any, TProps = any> =
+  InputMethod<TValueAs, TDefaultAs, TProps>
+  & ValidationRule
+  & {
+    componentProps: TProps,
+    defaultValue: inferValueAs<TValueAs>
   }
-}
-function inputMethod<TValueAs extends ValueAs, TDefaultValueAs extends DefaultValueAs, TProps>(valueAs: TValueAs, defaultValueAs: TDefaultValueAs, component: Component<TProps>): InputMethod<TValueAs, TDefaultValueAs, TProps> {
-  return {
-    valueAs,
-    defaultValueAs,
-    component
-  }
-}
-export function string() {
-  return inputMethodBuilder({
-    valueAs: 'string',
-    defaultValueAs: 'value'
-  })
+export type inferInput<TInputMethod> =
+  TInputMethod extends InputMethod<infer V, infer D, infer P>
+  ? Input<V, D, P>
+  : never
+
+type inferDefaultValueOfInput<T> =
+  T extends InputMethod<infer V, any, any> ? inferValueAs<V> : never
+export type InputRecord = Record<string, Input>
+export type inferDefaultValueOfInputRecord<T extends InputRecord> = {
+  [K in keyof T]: inferDefaultValueOfInput<T[K]>
 }
 
-export function number() {
-  return inputMethodBuilder({
-    valueAs: 'number',
-    defaultValueAs: 'value'
-  })
-}
-
-export function boolean() {
-  return inputMethodBuilder({
-    valueAs: 'boolean',
-    defaultValueAs: 'check'
-  })
-}
+// type inferInputMethodWithComponentProps<T> = T extends InputMethod<infer V, infer D, infer P> ? P extends never ? InputMethodWithComponentProps<V, D> : InputMethodWithComponentProps<V, D, P> : never

@@ -1,10 +1,12 @@
-import { DefaultValueAs, InputMethod, ValueAs, inferValueAs } from "./Input"
+import { inferInput } from "./Input"
+import { OptionalInputConfig, buildInput } from "./InputBuilder"
+import { DefaultValueAs, InputMethod, ValueAs, inferValueAs } from "./InputMethod"
 import * as RadixForm from "@radix-ui/react-form"
 
-type InputMethodRecord = Record<string, InputMethod>
-type inferInputMethodProps<T> = T extends InputMethod<any, any, infer P> ? P extends never ? [] : [P] : []
+export type InputMethodRecord = Record<string, InputMethod>
+// type inferInputMethodProps<T> = T extends InputMethod<any, any, infer P> ? P extends never ? [] : [P] : []
 type InputMethodWithComponentProps<TValueAs extends ValueAs = any, TDefaultAs extends DefaultValueAs = any, TProps = any> = InputMethod<TValueAs, TDefaultAs, TProps> & { componentProps: TProps, defaultValue: inferValueAs<TValueAs> }
-type inferInputMethodWithComponentProps<T> = T extends InputMethod<infer V, infer D, infer P> ? P extends never ? InputMethodWithComponentProps<V, D> : InputMethodWithComponentProps<V, D, P> : never
+// type inferInputMethodWithComponentProps<T> = T extends InputMethod<infer V, infer D, infer P> ? P extends never ? InputMethodWithComponentProps<V, D> : InputMethodWithComponentProps<V, D, P> : never
 export type InputMethodWithComponentPropsRecord = Record<string, InputMethodWithComponentProps>
 function isInputMethodDefaultValueAs<TDefaultValueAs extends DefaultValueAs>(inputMethod: InputMethodWithComponentProps<any, any>, defaultValueAs: TDefaultValueAs): inputMethod is InputMethodWithComponentProps<any, TDefaultValueAs> {
   return inputMethod.defaultValueAs === defaultValueAs
@@ -27,15 +29,11 @@ export function initForm<TInputMethodRecord extends InputMethodRecord>(inputs?: 
         inputs: new Proxy({}, {
           get: (_, props) => {
             return function(args: any) {
-              return {
-                ...inputs[props as string],
-                componentProps: args
-              }
+              return buildInput(inputs, props as string, args)
             }
-
           }
         }) as {
-            [K in keyof TInputMethodRecord]: (...args: inferInputMethodProps<TInputMethodRecord[K]>) => inferInputMethodWithComponentProps<TInputMethodRecord[K]>
+            [K in keyof TInputMethodRecord]: (...config: OptionalInputConfig<TInputMethodRecord[K]>) => inferInput<TInputMethodRecord[K]>
           },
         Form: <TRecord extends InputMethodWithComponentPropsRecord,>({ fields }: { fields: TRecord }) => <Form fields={fields} labels={labels} />
       }
@@ -51,7 +49,6 @@ export function Form<TRecord extends InputMethodWithComponentPropsRecord>({ fiel
   return (
     <RadixForm.Root>
       {Object.entries(fields).map(([name, field]) => {
-
         return (
           <RadixForm.Field key={name} name={name}>
             <RadixForm.Label>{labels?.[name] ?? name}</RadixForm.Label>
