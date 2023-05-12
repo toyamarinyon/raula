@@ -1,4 +1,4 @@
-import { inferInput } from './Input'
+import { inferInput, InputRecord } from './Input'
 import { OptionalInputConfig, buildInput } from './InputBuilder'
 import {
   DefaultValueAs,
@@ -9,7 +9,6 @@ import {
 import * as RadixForm from '@radix-ui/react-form'
 
 export type InputMethodRecord = Record<string, InputMethod>
-// type inferInputMethodProps<T> = T extends InputMethod<any, any, infer P> ? P extends never ? [] : [P] : []
 type InputMethodWithComponentProps<
   TValueAs extends ValueAs = any,
   TDefaultAs extends DefaultValueAs = any,
@@ -18,7 +17,6 @@ type InputMethodWithComponentProps<
   componentProps: TProps
   defaultValue: inferValueAs<TValueAs>
 }
-// type inferInputMethodWithComponentProps<T> = T extends InputMethod<infer V, infer D, infer P> ? P extends never ? InputMethodWithComponentProps<V, D> : InputMethodWithComponentProps<V, D, P> : never
 export type InputMethodWithComponentPropsRecord = Record<
   string,
   InputMethodWithComponentProps
@@ -74,11 +72,11 @@ export function initForm<TInputMethodRecord extends InputMethodRecord>(
   }
 }
 
-interface FormProps<TRecord extends InputMethodWithComponentPropsRecord> {
+interface FormProps<TRecord extends InputRecord> {
   fields: TRecord
   labels?: Record<string, string>
 }
-export function Form<TRecord extends InputMethodWithComponentPropsRecord>({
+export function Form<TRecord extends InputRecord>({
   fields,
   labels,
 }: FormProps<TRecord>) {
@@ -104,6 +102,7 @@ export function Form<TRecord extends InputMethodWithComponentPropsRecord>({
                 {field.component(field.componentProps)}
               </RadixForm.Control>
             )}
+            <RadixForm.Message />
           </RadixForm.Field>
         )
       })}

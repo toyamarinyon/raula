@@ -30,5 +30,3 @@ export type InputRecord = Record<string, Input>
 export type inferDefaultValueOfInputRecord<T extends InputRecord> = {
   [K in keyof T]: inferDefaultValueOfInput<T[K]>
 }
-
-// type inferInputMethodWithComponentProps<T> = T extends InputMethod<infer V, infer D, infer P> ? P extends never ? InputMethodWithComponentProps<V, D> : InputMethodWithComponentProps<V, D, P> : never
