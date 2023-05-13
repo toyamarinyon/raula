@@ -23,7 +23,8 @@ const CustomInput = forwardRef(
 
 const { inputs, Form } = initForm()
   .inputMethods({
-    text: string().render(({ defaultValue, ...props }) => (
+    text: string().render(() => <input type="text" />),
+    customtext: string().render(({ defaultValue, ...props }) => (
       <CustomInput defaultValue={defaultValue} {...props} />
     )),
     select: string()
@@ -50,7 +51,10 @@ const Component = (): JSX.Element => {
     {
       username: inputs.text({
         maxLength: 100,
-        optional: false,
+      }),
+      username2: inputs.customtext({
+        maxLength: 100,
+        pattern: '[\\sァ-ヿー–—―ｰ゠＝]+',
       }),
       occupations: inputs.select({
         componentProps: {
@@ -64,6 +68,7 @@ const Component = (): JSX.Element => {
     },
     {
       username: 'testHello222',
+      username2: '',
       occupations: 'b',
       isAdult: false,
     }

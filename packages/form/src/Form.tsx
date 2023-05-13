@@ -109,6 +109,7 @@ export function Form<TRecord extends InputRecord>({
               <RadixForm.Control
                 asChild
                 defaultChecked={Boolean(field.defaultValue)}
+                required={!field.optional}
               >
                 {field.component({
                   ...field.componentProps,
@@ -120,13 +121,14 @@ export function Form<TRecord extends InputRecord>({
               <RadixForm.Control
                 asChild
                 defaultValue={String(field.defaultValue)}
+                required={!field.optional}
+                minLength={field.minLength}
+                maxLength={field.maxLength}
+                pattern={field.pattern}
               >
                 {field.component({
                   ...field.componentProps,
                   defaultValue: field.defaultValue,
-                  required: !field.optional,
-                  minLength: field.minLength,
-                  maxLength: field.maxLength,
                 })}
               </RadixForm.Control>
             )}
@@ -135,6 +137,9 @@ export function Form<TRecord extends InputRecord>({
             </RadixForm.Message>
             <RadixForm.Message match={'tooShort'}>Too short</RadixForm.Message>
             <RadixForm.Message match={'tooLong'}>Too long</RadixForm.Message>
+            <RadixForm.Message match={'patternMismatch'}>
+              Pattern mismatch
+            </RadixForm.Message>
           </RadixForm.Field>
         )
       })}
