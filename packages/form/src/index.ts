@@ -1,2 +1,2 @@
 export { initForm } from './Form'
-export { string, number, boolean } from './Input'
+export { string, number, boolean } from './InputMethod'
