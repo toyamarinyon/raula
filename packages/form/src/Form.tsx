@@ -124,10 +124,17 @@ export function Form<TRecord extends InputRecord>({
                 {field.component({
                   ...field.componentProps,
                   defaultValue: field.defaultValue,
+                  required: !field.optional,
+                  minLength: field.minLength,
+                  maxLength: field.maxLength,
                 })}
               </RadixForm.Control>
             )}
-            {/* <RadixForm.Message /> */}
+            <RadixForm.Message match={'valueMissing'}>
+              Required
+            </RadixForm.Message>
+            <RadixForm.Message match={'tooShort'}>Too short</RadixForm.Message>
+            <RadixForm.Message match={'tooLong'}>Too long</RadixForm.Message>
           </RadixForm.Field>
         )
       })}
