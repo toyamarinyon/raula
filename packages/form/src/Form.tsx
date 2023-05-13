@@ -64,9 +64,11 @@ export function initForm<TInputMethodRecord extends InputMethodRecord>(
         },
         Form: <TRecord extends InputMethodWithComponentPropsRecord>({
           fields,
+          onSubmit,
         }: {
           fields: TRecord
-        }) => <Form fields={fields} labels={labels} />,
+          onSubmit: (data: inferInputMethodValueAsRecord<TRecord>) => void
+        }) => <Form fields={fields} labels={labels} onSubmit={onSubmit} />,
       }
     },
   }
@@ -75,13 +77,30 @@ export function initForm<TInputMethodRecord extends InputMethodRecord>(
 interface FormProps<TRecord extends InputRecord> {
   fields: TRecord
   labels?: Record<string, string>
+  onSubmit?: (data: inferInputMethodValueAsRecord<TRecord>) => void
 }
 export function Form<TRecord extends InputRecord>({
   fields,
   labels,
+  onSubmit,
 }: FormProps<TRecord>) {
   return (
-    <RadixForm.Root>
+    <RadixForm.Root
+      onSubmit={(event) => {
+        event.preventDefault()
+        const rawData = Object.fromEntries(new FormData(event.currentTarget))
+        const data = Object.fromEntries(
+          Object.keys(fields).map((key) => {
+            const field = fields[key]
+            const value = isInputMethodDefaultValueAs(field, 'check')
+              ? Boolean(rawData[key])
+              : rawData[key]
+            return [key, value]
+          })
+        )
+        onSubmit?.(data as inferInputMethodValueAsRecord<TRecord>)
+      }}
+    >
       {Object.entries(fields).map(([name, field]) => {
         return (
           <RadixForm.Field key={name} name={name}>
@@ -91,7 +110,10 @@ export function Form<TRecord extends InputRecord>({
                 asChild
                 defaultChecked={Boolean(field.defaultValue)}
               >
-                {field.component(field.componentProps)}
+                {field.component({
+                  ...field.componentProps,
+                  defaultValue: field.defaultValue,
+                })}
               </RadixForm.Control>
             )}
             {isInputMethodDefaultValueAs(field, 'value') && (
@@ -99,13 +121,17 @@ export function Form<TRecord extends InputRecord>({
                 asChild
                 defaultValue={String(field.defaultValue)}
               >
-                {field.component(field.componentProps)}
+                {field.component({
+                  ...field.componentProps,
+                  defaultValue: field.defaultValue,
+                })}
               </RadixForm.Control>
             )}
-            <RadixForm.Message />
+            {/* <RadixForm.Message /> */}
           </RadixForm.Field>
         )
       })}
+      <RadixForm.Submit>Submit</RadixForm.Submit>
     </RadixForm.Root>
   )
 }

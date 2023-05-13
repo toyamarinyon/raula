@@ -9,15 +9,21 @@ export type inferValueAs<T> = T extends 'string'
   ? boolean
   : never
 export type DefaultValueAs = 'value' | 'check'
-type Component<Props> = (args: Props) => ReactNode
+
+type InputComponentArgs<TValueAs extends ValueAs, TProps> = {
+  defaultValue: TValueAs
+} & TProps
+type InputComponent<TValueAs extends ValueAs, TProps> = (
+  args: InputComponentArgs<TValueAs, TProps>
+) => ReactNode
 export type InputMethod<
   TValueAs extends ValueAs = any,
   TDefaultValueAs extends DefaultValueAs = any,
-  TProps = never
+  TProps = any
 > = {
   valueAs: TValueAs
   defaultValueAs: TDefaultValueAs
-  component: Component<TProps>
+  component: InputComponent<TValueAs, TProps>
 }
 export type inferInputMethod<T> = T extends InputMethod<
   infer TValueAs,
@@ -30,7 +36,7 @@ export type inferInputMethod<T> = T extends InputMethod<
 function inputMethodBuilder<
   TValueAs extends ValueAs,
   TDefaultValueAs extends DefaultValueAs,
-  TProps = any
+  TProps = unknown
 >({
   valueAs,
   defaultValueAs,
@@ -44,18 +50,18 @@ function inputMethodBuilder<
         valueAs,
         defaultValueAs,
       }),
-    render: (component: Component<TProps>) =>
+    render: (component: InputComponent<TValueAs, TProps>) =>
       inputMethod(valueAs, defaultValueAs, component),
   }
 }
 function inputMethod<
   TValueAs extends ValueAs,
   TDefaultValueAs extends DefaultValueAs,
-  TProps
+  TProps = unknown
 >(
   valueAs: TValueAs,
   defaultValueAs: TDefaultValueAs,
-  component: Component<TProps>
+  component: InputComponent<TValueAs, TProps>
 ): InputMethod<TValueAs, TDefaultValueAs, TProps> {
   return {
     valueAs,

@@ -11,7 +11,7 @@ type InputConfig<TProps> = TProps extends undefined
 
 export type OptionalInputConfig<TInputMethod> =
   TInputMethod extends InputMethod<any, any, infer Props>
-    ? Props extends never
+    ? Props extends unknown
       ? [InputConfig<any>] | []
       : [InputConfig<Props>]
     : never
@@ -27,7 +27,7 @@ export type inferInputConfig<TInputMethod> = TInputMethod extends InputMethod<
 function hasComponentProps(
   inputConfig: any
 ): inputConfig is InputConfig<Record<string, any>> {
-  return inputConfig.componentProps !== undefined
+  return inputConfig?.componentProps !== undefined
 }
 
 export function buildInput<

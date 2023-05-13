@@ -1,11 +1,31 @@
 import { initForm } from './Form'
-import { string } from './InputMethod'
+import { boolean, string } from './InputMethod'
 import { useFields } from './useFields'
 import type { Meta, StoryObj } from '@storybook/react'
+import { forwardRef } from 'react'
+
+const CustomInput = forwardRef(
+  (
+    {
+      defaultValue,
+      ...props
+    }: {
+      defaultValue: string
+    },
+    ref: React.Ref<HTMLInputElement>
+  ) => (
+    <>
+      <input type="text" {...props} defaultValue={defaultValue} ref={ref} />
+      <p>{defaultValue}</p>
+    </>
+  )
+)
 
 const { inputs, Form } = initForm()
   .inputMethods({
-    text: string().render(() => <input type="text" />),
+    text: string().render(({ defaultValue, ...props }) => (
+      <CustomInput defaultValue={defaultValue} {...props} />
+    )),
     select: string()
       .renderOption<{ selectOption: { label: string; value: string }[] }>()
       .render(({ selectOption }) => (
@@ -17,6 +37,7 @@ const { inputs, Form } = initForm()
           ))}
         </select>
       )),
+    checkbox: boolean().render(() => <input type="checkbox" />),
   })
   .labels({
     username: 'ユーザー名',
@@ -39,14 +60,23 @@ const Component = (): JSX.Element => {
           ],
         },
       }),
+      isAdult: inputs.checkbox(),
     },
     {
       username: 'testHello222',
       occupations: 'b',
+      isAdult: false,
     }
   )
 
-  return <Form fields={fields} />
+  return (
+    <Form
+      fields={fields}
+      onSubmit={(data) => {
+        console.log(data)
+      }}
+    />
+  )
 }
 
 const meta: Meta<typeof Component> = {
