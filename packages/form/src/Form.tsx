@@ -39,7 +39,7 @@ export type inferInputMethodValueAsRecord<T extends InputMethodRecord> = {
 function createForm<TInputMethodRecord extends InputMethodRecord>(
   inputs?: TInputMethodRecord,
   labels?: Record<string, string>,
-  layoutComponent?: LayoutComponent
+  layoutComponent?: FieldLayoutComponent
 ) {
   if (inputs == null) {
     throw new Error('No inputs registered')
@@ -70,7 +70,7 @@ function createForm<TInputMethodRecord extends InputMethodRecord>(
         fields={fields}
         labels={labels}
         onSubmit={onSubmit}
-        layoutComponent={layoutComponent}
+        fieldLayoutComponent={layoutComponent}
       />
     ),
     useFields,
@@ -83,13 +83,13 @@ interface FormBuilder<TInputMethodRecord extends InputMethodRecord> {
   ) => FormBuilder<TInputMethodRecord>
   labels: (labels: Record<string, string>) => FormBuilder<TInputMethodRecord>
   create: () => ReturnType<typeof createForm<TInputMethodRecord>>
-  layout: (props: LayoutComponent) => FormBuilder<TInputMethodRecord>
+  layout: (props: FieldLayoutComponent) => FormBuilder<TInputMethodRecord>
 }
 
 export function initForm<TInputMethodRecord extends InputMethodRecord>(
   inputs?: TInputMethodRecord,
   labels?: Record<string, string>,
-  layoutComponent?: LayoutComponent
+  layoutComponent?: FieldLayoutComponent
 ): FormBuilder<TInputMethodRecord> {
   return {
     inputMethods: <TInputMethodRecord extends InputMethodRecord>(
@@ -107,17 +107,17 @@ interface FormProps<TRecord extends InputRecord> {
   fields: TRecord
   labels?: Record<string, string>
   onSubmit?: (data: inferInputMethodValueAsRecord<TRecord>) => void
-  layoutComponent?: LayoutComponent
+  fieldLayoutComponent?: FieldLayoutComponent
 }
 
-interface FieldProps {
+interface FieldLayoutComponentProps {
   labelComponent: ReactNode
   controlComponent: ReactNode
   messageComponent: ReactNode
 }
-type LayoutComponent = (props: FieldProps) => JSX.Element
+type FieldLayoutComponent = (props: FieldLayoutComponentProps) => JSX.Element
 
-const DefaultLayoutComponent: LayoutComponent = ({
+const DefaultFieldLayoutComponent: FieldLayoutComponent = ({
   labelComponent,
   controlComponent,
   messageComponent,
@@ -135,7 +135,7 @@ export function Form<TRecord extends InputRecord>({
   fields,
   labels,
   onSubmit,
-  layoutComponent: LayoutComponent = DefaultLayoutComponent,
+  fieldLayoutComponent: FieldLayoutComponent = DefaultFieldLayoutComponent,
 }: FormProps<TRecord>) {
   return (
     <RadixForm.Root
@@ -157,7 +157,7 @@ export function Form<TRecord extends InputRecord>({
       {Object.entries(fields).map(([name, field]) => {
         return (
           <RadixForm.Field key={name} name={name}>
-            <LayoutComponent
+            <FieldLayoutComponent
               labelComponent={
                 <RadixForm.Label>{labels?.[name] ?? name}</RadixForm.Label>
               }
