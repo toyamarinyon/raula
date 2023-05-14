@@ -24,12 +24,12 @@ export type inferInputMethodValueAsRecord<T extends InputMethodRecord> = {
   [K in keyof T]: inferInputMethodValueAs<T[K]>
 }
 
-function createForm<TInputMethodRecord extends InputMethodRecord>(
-  inputs?: TInputMethodRecord,
-  labels?: Record<string, string>,
-  fieldLayoutComponent?: FieldLayoutComponent,
-  formLayoutComponent?: FormLayoutComponent
-) {
+function createForm<TInputMethodRecord extends InputMethodRecord>({
+  inputs,
+  labels,
+  fieldLayoutComponent,
+  formLayoutComponent,
+}: CreateFormArgs<TInputMethodRecord>) {
   if (inputs == null) {
     throw new Error('No inputs registered')
   }
@@ -83,6 +83,8 @@ type InitializeFormArgs<TInputMethodRecord extends InputMethodRecord> = {
   fieldLayoutComponent?: FieldLayoutComponent
   formLayoutComponent?: FormLayoutComponent
 }
+type CreateFormArgs<TInputMethodRecord extends InputMethodRecord> =
+  InitializeFormArgs<TInputMethodRecord>
 export function initForm<TInputMethodRecord extends InputMethodRecord>(
   args: InitializeFormArgs<TInputMethodRecord>
 ): FormBuilder<TInputMethodRecord> {
@@ -91,13 +93,7 @@ export function initForm<TInputMethodRecord extends InputMethodRecord>(
       inputs: TInputMethodRecord
     ) => initForm({ ...args, inputs }),
     labels: (labels: Record<string, string>) => initForm({ ...args, labels }),
-    create: () =>
-      createForm(
-        args.inputs,
-        args.labels,
-        args.fieldLayoutComponent,
-        args.formLayoutComponent
-      ),
+    create: () => createForm(args),
     fieldLayout: (newLayoutComponent) =>
       initForm({
         ...args,
