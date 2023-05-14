@@ -1,4 +1,4 @@
-import { Divider, Input, SimpleGrid, VStack } from '@chakra-ui/react'
+import { Button, Divider, Input, SimpleGrid, VStack } from '@chakra-ui/react'
 import { initForm, string } from '@raula/form'
 
 export const { Form, inputs, useFields } = initForm()
@@ -23,4 +23,5 @@ export const { Form, inputs, useFields } = initForm()
       </SimpleGrid>
     </SimpleGrid>
   ))
+  .submitButton(() => <Button type="submit">送信</Button>)
   .create()

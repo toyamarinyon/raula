@@ -59,6 +59,7 @@ const { inputs, Form, useFields } = initForm()
       {controlComponent}
     </div>
   ))
+  .submitButton(() => <button type="submit">submit!!!!!</button>)
   .create()
 
 const Component = (): JSX.Element => {

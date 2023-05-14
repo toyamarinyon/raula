@@ -29,6 +29,7 @@ function createForm<TInputMethodRecord extends InputMethodRecord>({
   labels,
   fieldLayoutComponent,
   formLayoutComponent,
+  subtmitButtonComponent,
 }: CreateFormArgs<TInputMethodRecord>) {
   if (inputs == null) {
     throw new Error('No inputs registered')
@@ -61,6 +62,7 @@ function createForm<TInputMethodRecord extends InputMethodRecord>({
         onSubmit={onSubmit}
         fieldLayoutComponent={fieldLayoutComponent}
         formLayoutComponent={formLayoutComponent}
+        submitButtonComponent={subtmitButtonComponent}
       />
     ),
     useFields,
@@ -75,18 +77,22 @@ interface FormBuilder<TInputMethodRecord extends InputMethodRecord> {
   create: () => ReturnType<typeof createForm<TInputMethodRecord>>
   fieldLayout: (props: FieldLayoutComponent) => FormBuilder<TInputMethodRecord>
   formLayout: (props: FormLayoutComponent) => FormBuilder<TInputMethodRecord>
+  submitButton: (
+    component: () => JSX.Element
+  ) => FormBuilder<TInputMethodRecord>
 }
 
 type InitializeFormArgs<TInputMethodRecord extends InputMethodRecord> = {
-  inputs: TInputMethodRecord
+  inputs?: TInputMethodRecord
   labels?: Record<string, string>
   fieldLayoutComponent?: FieldLayoutComponent
   formLayoutComponent?: FormLayoutComponent
+  subtmitButtonComponent?: () => JSX.Element
 }
 type CreateFormArgs<TInputMethodRecord extends InputMethodRecord> =
   InitializeFormArgs<TInputMethodRecord>
 export function initForm<TInputMethodRecord extends InputMethodRecord>(
-  args: InitializeFormArgs<TInputMethodRecord>
+  args: InitializeFormArgs<TInputMethodRecord> = {}
 ): FormBuilder<TInputMethodRecord> {
   return {
     inputMethods: <TInputMethodRecord extends InputMethodRecord>(
@@ -104,6 +110,11 @@ export function initForm<TInputMethodRecord extends InputMethodRecord>(
         ...args,
         formLayoutComponent: newFormLayoutComponent,
       }),
+    submitButton: (component) =>
+      initForm({
+        ...args,
+        subtmitButtonComponent: component,
+      }),
   }
 }
 
@@ -113,6 +124,7 @@ interface FormProps<TRecord extends InputRecord> {
   onSubmit?: (data: inferInputMethodValueAsRecord<TRecord>) => void
   fieldLayoutComponent?: FieldLayoutComponent
   formLayoutComponent?: FormLayoutComponent
+  submitButtonComponent?: () => JSX.Element
 }
 
 interface FormLayoutComponentProps {
@@ -160,6 +172,9 @@ export function Form<TRecord extends InputRecord>({
   onSubmit,
   formLayoutComponent: FormLayoutComponent = DefaultFormLayoutComponent,
   fieldLayoutComponent: FieldLayoutComponent = DefaultFieldLayoutComponent,
+  submitButtonComponent: SubmitButtonComponent = () => (
+    <button type="submit">Submit</button>
+  ),
 }: FormProps<TRecord>) {
   return (
     <RadixForm.Root
@@ -237,7 +252,11 @@ export function Form<TRecord extends InputRecord>({
             </RadixForm.Field>
           )
         })}
-        submitButtonComponent={<RadixForm.Submit>Submit</RadixForm.Submit>}
+        submitButtonComponent={
+          <RadixForm.Submit asChild>
+            <SubmitButtonComponent />
+          </RadixForm.Submit>
+        }
       />
     </RadixForm.Root>
   )
