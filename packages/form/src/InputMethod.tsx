@@ -33,6 +33,20 @@ export type inferInputMethod<T> = T extends InputMethod<
   ? InputMethod<TValueAs, TDefaultValueAs, TProps>
   : InputMethod
 
+interface InputMethodBuilder<
+  TValueAs extends ValueAs,
+  TDefaultValueAs extends DefaultValueAs,
+  TProps = unknown
+> {
+  renderOption: <NewProps>() => InputMethodBuilder<
+    TValueAs,
+    TDefaultValueAs,
+    NewProps
+  >
+  render: (
+    component: InputComponent<TValueAs, TProps>
+  ) => InputMethod<TValueAs, TDefaultValueAs, TProps>
+}
 function inputMethodBuilder<
   TValueAs extends ValueAs,
   TDefaultValueAs extends DefaultValueAs,
@@ -43,7 +57,7 @@ function inputMethodBuilder<
 }: {
   valueAs: TValueAs
   defaultValueAs: TDefaultValueAs
-}) {
+}): InputMethodBuilder<TValueAs, TDefaultValueAs, TProps> {
   return {
     renderOption: <NewProps,>() =>
       inputMethodBuilder<TValueAs, TDefaultValueAs, NewProps>({
