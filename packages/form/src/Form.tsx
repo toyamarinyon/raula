@@ -1,6 +1,11 @@
 import { inferInput, InputRecord } from './Input'
 import { OptionalInputConfig, buildInput } from './InputBuilder'
-import { DefaultValueAs, InputMethod, inferValueAs } from './InputMethod'
+import {
+  AnyValueAs,
+  DefaultValueAs,
+  InputMethod,
+  inferValueAs,
+} from './InputMethod'
 import { useFields } from './useFields'
 import * as RadixForm from '@radix-ui/react-form'
 import { ReactNode } from 'react'
@@ -9,10 +14,10 @@ export type InputMethodRecord = Record<string, InputMethod>
 function isInputMethodDefaultValueAs<TDefaultValueAs extends DefaultValueAs>(
   inputMethod: InputMethod,
   defaultValueAs: TDefaultValueAs
-): inputMethod is InputMethod<any, TDefaultValueAs> {
+): inputMethod is InputMethod<AnyValueAs, TDefaultValueAs> {
   return inputMethod.defaultValueAs === defaultValueAs
 }
-type inferInputMethodValueAs<T> = T extends InputMethod<infer V, any, any>
+type inferInputMethodValueAs<T> = T extends InputMethod<infer V>
   ? inferValueAs<V>
   : never
 export type inferInputMethodValueAsRecord<T extends InputMethodRecord> = {

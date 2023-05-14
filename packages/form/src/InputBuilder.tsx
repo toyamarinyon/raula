@@ -1,6 +1,11 @@
 import { InputMethodRecord } from './Form'
 import { inferInput } from './Input'
-import { InputMethod } from './InputMethod'
+import {
+  AnyDefaultValueAs,
+  AnyProps,
+  AnyValueAs,
+  InputMethod,
+} from './InputMethod'
 import { ValidationRule } from './Validation'
 
 type InputConfig<TProps> = TProps extends undefined
@@ -10,15 +15,15 @@ type InputConfig<TProps> = TProps extends undefined
     }
 
 export type OptionalInputConfig<TInputMethod> =
-  TInputMethod extends InputMethod<any, any, infer Props>
+  TInputMethod extends InputMethod<AnyValueAs, AnyDefaultValueAs, infer Props>
     ? Props extends unknown
-      ? [InputConfig<any>] | []
+      ? [InputConfig<AnyProps>] | []
       : [InputConfig<Props>]
     : never
 
 export type inferInputConfig<TInputMethod> = TInputMethod extends InputMethod<
-  any,
-  any,
+  AnyValueAs,
+  AnyDefaultValueAs,
   infer Props
 >
   ? InputConfig<Props>
