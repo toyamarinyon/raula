@@ -77,24 +77,37 @@ interface FormBuilder<TInputMethodRecord extends InputMethodRecord> {
   formLayout: (props: FormLayoutComponent) => FormBuilder<TInputMethodRecord>
 }
 
-export function initForm<TInputMethodRecord extends InputMethodRecord>(
-  inputs?: TInputMethodRecord,
-  labels?: Record<string, string>,
-  fieldLayoutComponent?: FieldLayoutComponent,
+type InitializeFormArgs<TInputMethodRecord extends InputMethodRecord> = {
+  inputs: TInputMethodRecord
+  labels?: Record<string, string>
+  fieldLayoutComponent?: FieldLayoutComponent
   formLayoutComponent?: FormLayoutComponent
+}
+export function initForm<TInputMethodRecord extends InputMethodRecord>(
+  args: InitializeFormArgs<TInputMethodRecord>
 ): FormBuilder<TInputMethodRecord> {
   return {
     inputMethods: <TInputMethodRecord extends InputMethodRecord>(
       inputs: TInputMethodRecord
-    ) => initForm(inputs),
-    labels: (labels: Record<string, string>) =>
-      initForm(inputs, labels, fieldLayoutComponent, formLayoutComponent),
+    ) => initForm({ ...args, inputs }),
+    labels: (labels: Record<string, string>) => initForm({ ...args, labels }),
     create: () =>
-      createForm(inputs, labels, fieldLayoutComponent, formLayoutComponent),
+      createForm(
+        args.inputs,
+        args.labels,
+        args.fieldLayoutComponent,
+        args.formLayoutComponent
+      ),
     fieldLayout: (newLayoutComponent) =>
-      initForm(inputs, labels, newLayoutComponent, formLayoutComponent),
+      initForm({
+        ...args,
+        fieldLayoutComponent: newLayoutComponent,
+      }),
     formLayout: (newFormLayoutComponent) =>
-      initForm(inputs, labels, fieldLayoutComponent, newFormLayoutComponent),
+      initForm({
+        ...args,
+        formLayoutComponent: newFormLayoutComponent,
+      }),
   }
 }
 
