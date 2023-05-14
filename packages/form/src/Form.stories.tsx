@@ -43,7 +43,14 @@ const { inputs, Form, useFields } = initForm()
     username: 'ユーザー名',
     occupations: '職業',
   })
-  .layout(({ labelComponent, controlComponent, messageComponent }) => (
+  .formLayout(({ fieldComponent, submitButtonComponent }) => (
+    <div>
+      {fieldComponent}
+      <hr />
+      {submitButtonComponent}
+    </div>
+  ))
+  .fieldLayout(({ labelComponent, controlComponent, messageComponent }) => (
     <div>
       <div>
         {labelComponent}

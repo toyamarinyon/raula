@@ -1,4 +1,4 @@
-import { Input, SimpleGrid } from '@chakra-ui/react'
+import { Divider, Input, SimpleGrid, VStack } from '@chakra-ui/react'
 import { initForm, string } from '@raula/form'
 
 export const { Form, inputs, useFields } = initForm()
@@ -8,7 +8,13 @@ export const { Form, inputs, useFields } = initForm()
   .inputMethods({
     text: string().render(() => <Input />),
   })
-  .layout(({ labelComponent, controlComponent, messageComponent }) => (
+  .formLayout(({ fieldComponent, submitButtonComponent }) => (
+    <VStack>
+      <VStack divider={<Divider />}>{fieldComponent}</VStack>
+      {submitButtonComponent}
+    </VStack>
+  ))
+  .fieldLayout(({ labelComponent, controlComponent, messageComponent }) => (
     <SimpleGrid spacingY={8} columns={2}>
       {labelComponent}
       <SimpleGrid>
