@@ -1,6 +1,5 @@
 import { initForm } from './Form'
 import { boolean, string } from './InputMethod'
-import { useFields } from './useFields'
 import type { Meta, StoryObj } from '@storybook/react'
 import { forwardRef } from 'react'
 
@@ -21,7 +20,7 @@ const CustomInput = forwardRef(
   )
 )
 
-const { inputs, Form } = initForm()
+const { inputs, Form, useFields } = initForm()
   .inputMethods({
     text: string().render(() => <input type="text" />),
     customtext: string().render(({ defaultValue, ...props }) => (
@@ -44,6 +43,23 @@ const { inputs, Form } = initForm()
     username: 'ユーザー名',
     occupations: '職業',
   })
+  .formLayout(({ fieldComponent, submitButtonComponent }) => (
+    <div>
+      {fieldComponent}
+      <hr />
+      {submitButtonComponent}
+    </div>
+  ))
+  .fieldLayout(({ labelComponent, controlComponent, messageComponent }) => (
+    <div>
+      <div>
+        {labelComponent}
+        {messageComponent}
+      </div>
+      {controlComponent}
+    </div>
+  ))
+  .submitButton(() => <button type="submit">submit!!!!!</button>)
   .create()
 
 const Component = (): JSX.Element => {

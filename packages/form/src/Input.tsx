@@ -1,4 +1,7 @@
 import {
+  AnyDefaultValueAs,
+  AnyProps,
+  AnyValueAs,
   DefaultValueAs,
   InputMethod,
   ValueAs,
@@ -7,9 +10,9 @@ import {
 import { ValidationRule } from './Validation'
 
 export type Input<
-  TValueAs extends ValueAs = any,
-  TDefaultAs extends DefaultValueAs = any,
-  TProps = any
+  TValueAs extends ValueAs = AnyValueAs,
+  TDefaultAs extends DefaultValueAs = AnyDefaultValueAs,
+  TProps = AnyProps
 > = InputMethod<TValueAs, TDefaultAs, TProps> &
   ValidationRule & {
     componentProps: TProps
@@ -23,7 +26,7 @@ export type inferInput<TInputMethod> = TInputMethod extends InputMethod<
   ? Input<V, D, P>
   : never
 
-type inferDefaultValueOfInput<T> = T extends InputMethod<infer V, any, any>
+type inferDefaultValueOfInput<T> = T extends InputMethod<infer V>
   ? inferValueAs<V>
   : never
 export type InputRecord = Record<string, Input>
