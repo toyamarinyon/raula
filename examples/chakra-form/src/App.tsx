@@ -5,9 +5,13 @@ function App() {
   const fields = useFields(
     {
       username: inputs.text(),
+      password: inputs.password(),
+      note: inputs.textarea(),
     },
     {
       username: '',
+      password: '',
+      note: '',
     }
   )
   return (

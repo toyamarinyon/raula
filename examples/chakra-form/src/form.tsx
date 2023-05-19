@@ -1,4 +1,11 @@
-import { Button, Divider, Input, SimpleGrid, VStack } from '@chakra-ui/react'
+import {
+  Button,
+  Divider,
+  Input,
+  SimpleGrid,
+  Textarea,
+  VStack,
+} from '@chakra-ui/react'
 import { initForm, string } from '@raula/form'
 
 export const { Form, inputs, useFields } = initForm()
@@ -7,6 +14,8 @@ export const { Form, inputs, useFields } = initForm()
   })
   .inputMethods({
     text: string().render(() => <Input />),
+    textarea: string().render(() => <Textarea />),
+    password: string().render(() => <Input type="password" />),
   })
   .formLayout(({ fieldComponent, submitButtonComponent }) => (
     <VStack>
