@@ -18,7 +18,7 @@ jobs:
             }
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: "echo 'latest release: ${{ steps.get_latest_release.outputs.data.createDiscussion.discussion.id }}'"
+      - run: "echo 'latest release: ${{ fromJSON(steps.get_latest_release.outputs.data.createDiscussion.discussion.id) }}'"
       - uses: octokit/graphql-action@v2.x
         id: add_label
         with:
@@ -33,6 +33,6 @@ jobs:
                 clientMutationId
               }
             }
-          discussionId: ${{ steps.get_latest_release.outputs.data.createDiscussion.discussion.id }}
+          discussionId: ${{ fromJSON(steps.get_latest_release.outputs.data.createDiscussion.discussion.id) }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
