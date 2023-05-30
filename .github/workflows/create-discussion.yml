@@ -9,15 +9,13 @@ jobs:
         id: get_latest_release
         with:
           query: |
-            mutation($title:String!, $body:String!) {
+            mutation {
               createDiscussion(input: {repositoryId: "R_kgDOI5vcDQ", categoryId: "DIC_kwDOI5vcDc4CUA42", title: "test", body: "body"}) {
                 discussion {
                   id
                 }
               }
             }
-          owner: "toyamarinyon"
-          repo: "raula"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: "echo 'latest release: ${{ steps.get_latest_release.outputs.data }}'"
