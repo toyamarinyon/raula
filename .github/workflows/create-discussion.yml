@@ -26,10 +26,10 @@ jobs:
           variables: |
             discussion_id: ${{ fromJSON(steps.get_latest_release.outputs.data).createDiscussion.discussion.id }}
           query: |
-            mutation($discussion_id:ID!) {
+            mutation {
               addLabelsToLabelable(
                 input:{
-                  labelableId: $discussion_id
+                  labelableId: '${{ fromJSON(steps.get_latest_release.outputs.data).createDiscussion.discussion.id }}'
                   labelIds: ["LA_kwDOI5vcDc8AAAABMOwhlg"]
                 }
               ) {
