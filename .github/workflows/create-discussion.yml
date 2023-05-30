@@ -21,9 +21,8 @@ jobs:
                 }
               }
             }
-          variables: |
-            owner: "toyamarinyon"
-            repo: "raula"
+          owner: "toyamarinyon"
+          repo: "raula"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: "echo 'latest release: ${{ steps.get_latest_release.outputs.data }}'"
