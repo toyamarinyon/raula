@@ -18,4 +18,21 @@ jobs:
             }
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: "echo 'latest release: ${{ steps.get_latest_release.outputs.data }}'"
+      - run: "echo 'latest release: ${{ steps.get_latest_release.outputs.data.createDiscussion.discussion.id }}'"
+      - uses: octokit/graphql-action@v2.x
+        id: add_label
+        with:
+          query: |
+            mutation($discussionId:String!) {
+              addLabelsToLabelable(
+                input:{
+                  labelableId: $discussionId
+                  labelIds: ["LA_kwDOI5vcDc8AAAABMOwhlg"]
+                }
+              ) {
+                clientMutationId
+              }
+            }
+          discussionId: ${{ steps.get_latest_release.outputs.data.createDiscussion.discussion.id }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
