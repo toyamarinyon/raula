@@ -29,7 +29,7 @@ jobs:
             mutation {
               addLabelsToLabelable(
                 input:{
-                  labelableId: '${{ fromJSON(steps.get_latest_release.outputs.data).createDiscussion.discussion.id }}'
+                  labelableId: "${{ fromJSON(steps.get_latest_release.outputs.data).createDiscussion.discussion.id }}"
                   labelIds: ["LA_kwDOI5vcDc8AAAABMOwhlg"]
                 }
               ) {
