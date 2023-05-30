@@ -23,6 +23,7 @@ jobs:
       - uses: octokit/graphql-action@v2.x
         id: add_label
         with:
+          discussionId: ${{ fromJSON(steps.get_latest_release.outputs.data).createDiscussion.discussion.id }}
           query: |
             mutation($discussionId:String!) {
               addLabelsToLabelable(
@@ -34,6 +35,5 @@ jobs:
                 clientMutationId
               }
             }
-          discussionId: ${{ fromJSON(steps.get_latest_release.outputs.data).createDiscussion.discussion.id }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
