@@ -9,16 +9,10 @@ jobs:
         id: get_latest_release
         with:
           query: |
-            query release($owner:String!,$repo:String!) {
-              repository(owner:$owner,name:$repo) {
-                id
-                releases(first:1) {
-                  nodes {
-                    name
-                    createdAt
-                    tagName
-                    description
-                  }
+            mutation($title:String!, $body:String!) {
+              createDiscussion(input: {repositoryId: "R_kgDOI5vcDQ", categoryId: "DIC_kwDOI5vcDc4CUA42", title: "test", body: "body"}) {
+                discussion {
+                  id
                 }
               }
             }
