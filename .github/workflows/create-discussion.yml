@@ -1,6 +1,6 @@
 name: Create Discussion
 on:
-  workflow_dispatch:
+  push:
 jobs:
   logLatestRelease:
     runs-on: ubuntu-latest
@@ -18,7 +18,7 @@ jobs:
             }
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: "echo 'latest release: ${{ fromJSON(steps.get_latest_release.outputs.data.createDiscussion.discussion.id) }}'"
+      - run: "echo 'latest release: ${{ fromJSON(steps.get_latest_release.outputs.data) }}'"
       - uses: octokit/graphql-action@v2.x
         id: add_label
         with:
