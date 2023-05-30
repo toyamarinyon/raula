@@ -9,7 +9,7 @@ jobs:
         id: get_latest_release
         with:
           query: |
-            mutation {
+            mutation createDiscussionMutation {
               createDiscussion(input: {repositoryId: "R_kgDOI5vcDQ", categoryId: "DIC_kwDOI5vcDc4CUA42", title: "test", body: "body"}) {
                 discussion {
                   id
