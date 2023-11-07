@@ -1,0 +1,50 @@
+name: create_discussion_for_meeting_note
+on:
+  workflow_dispatch:
+  schedule:
+    # cron: "分 時 * * 曜日"で指定します。タイムゾーンが異なるので、9時間前の時間にしてください。
+    # 例: 毎週日曜〜木曜 12:00に実行する場合は　cron: "00 2 * * sun-thu"
+    # 例: 月曜 10:30に実行する場合は　cron: "30 1 * * mon"
+    - cron: {{"00 2 * * sun-thu"}}
+
+jobs:
+  create_discussion_for_meeting_note:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      TZ: "Asia/Tokyo"
+    steps:
+      - id: get_date
+        name: Get date
+        run: |
+          tomorrow=$(date --date '+1 day' +%Y/%m/%d)
+          today=$(date +%Y/%m/%d)
+          echo "tomorrow=$tomorrow" >> $GITHUB_OUTPUT
+          echo "today=$today" >> $GITHUB_OUTPUT
+
+      - name: Create a new discussion
+        id: create_discussion
+        uses: octokit/graphql-action@v2.x
+        with:
+          repositoryId: "{{レポジトリのID}}"
+          categoryId: "{{カテゴリのID}}"
+          # DiscussionのTitle
+          # ${{steps.get_date.outputs.today}}と入力すると、当日の日付に置き換わります
+          # 例: ${{steps.get_date.outputs.today}} ミーティング議事メモ
+          # ${{steps.get_date.outputs.tomorrow}}と入力すると、明日の日付に置き換わります
+          title: "${{steps.get_date.outputs.today}} - DS議事録_Plain EDI - FE"
+          # Discussionの本文
+          body: |-
+            定型文をここに入力してください。
+
+          # ここは触らなくてOK
+          query: |
+            mutation($title:String!, $body:String!, $repositoryId:ID!, $categoryId: ID!) {
+              createDiscussion(input: {repositoryId: $repositoryId, categoryId: $categoryId, title: $title, body: $body}) {
+                discussion {
+                  id
+                }
+              }
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
